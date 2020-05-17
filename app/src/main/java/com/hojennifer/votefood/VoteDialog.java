@@ -21,7 +21,13 @@ public class VoteDialog extends AppCompatDialogFragment {
     Button confirm;
     Button cancel;
     Food food;
+    int position;
     VoteDialog dialog;
+    MainActivity mainActivity;
+
+    public VoteDialog(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class VoteDialog extends AppCompatDialogFragment {
         dialog = this;
 
         food = (Food) getArguments().getSerializable("food info");
+        position = getArguments().getInt("food position");
 
         name = view.findViewById(R.id.tv_foodname);
         name.setText( food.name );
@@ -56,6 +63,7 @@ public class VoteDialog extends AppCompatDialogFragment {
             public void onClick(View view) {
                 int score = rater.getValue();
                 food.votes = score;
+                mainActivity.foodRecyclerViewAdapter.updateFoods(food, position);
                 dialog.dismiss();
             }
         });

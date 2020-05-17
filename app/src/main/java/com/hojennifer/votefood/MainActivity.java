@@ -43,11 +43,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(foodRecyclerViewAdapter);
 
     }
-    public void createDialog(Food food){
-        VoteDialog voteDialog = new VoteDialog();
+    public void createDialog(Food food, final int position){
+        VoteDialog voteDialog = new VoteDialog(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putSerializable("food info", food);
+        bundle.putInt("food position", position);
         voteDialog.setArguments(bundle);
         voteDialog.show(fragmentManager, "vote food");
     }

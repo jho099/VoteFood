@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder> {
     ArrayList<Food> foods;
@@ -34,6 +35,13 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         }
     }
 
+    public void updateFoods(Food food, int position){
+        Food toBeUpdated = foods.get(position);
+        toBeUpdated.votes = food.votes;
+        Collections.sort(foods);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,13 +54,14 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         final Food food = foods.get(position);
+        final int index = position;
         holder.foodPic.setImageResource(food.drawableID);
         holder.name.setText(food.name);
         holder.score.setText(String.valueOf(food.votes));
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivity.createDialog(food);
+                mainActivity.createDialog(food, index);
             }
         });
 
