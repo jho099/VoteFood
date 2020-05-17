@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">VoteFood</string>
+    <string name="app_name">Vote Fast Food</string>
+    <string name="textview">TextView</string>
 </resources>
