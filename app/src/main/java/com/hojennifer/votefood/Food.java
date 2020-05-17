@@ -1,6 +1,8 @@
 package com.hojennifer.votefood;
 
-public class Food {
+import java.io.Serializable;
+
+public class Food implements Serializable {
     public String name;
     public int votes;
     public int drawableID;

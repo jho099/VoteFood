@@ -1,11 +1,14 @@
 package com.hojennifer.votefood;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -14,13 +17,22 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Food> foods;
     RecyclerView recyclerView;
     FoodRecyclerViewAdapter foodRecyclerViewAdapter;
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         foods = loadFoods();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPrefs.edit();
+        for(int i = 0; i < foods.size(); i++){
+            String name = foods.get(i).name;
+            editor.putInt(name, 0);
+        }
+        editor.apply();
         recyclerView = findViewById(R.id.rv_foodList);
-        foodRecyclerViewAdapter = new FoodRecyclerViewAdapter(foods);
+        foodRecyclerViewAdapter = new FoodRecyclerViewAdapter(foods, this);
 
         foodRecyclerViewAdapter.notifyDataSetChanged();
 
@@ -29,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         recyclerView.setAdapter(foodRecyclerViewAdapter);
+
+    }
+    public void createDialog(Food food){
+        VoteDialog voteDialog = new VoteDialog();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("food info", food);
+        voteDialog.setArguments(bundle);
+        voteDialog.show(fragmentManager, "vote food");
     }
     private ArrayList<Food> loadFoods(){
         ArrayList<Food> foods = new ArrayList<Food>();

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Vote Fast Food</string>
     <string name="textview">TextView</string>
+    <string name="contentDescription">TODO</string>
+    <string name="rate_it_out_of_10">Rate it out of 10!</string>
+    <string name="tv_foodname">TextView</string>
+    <string name="confirm">confirm</string>
 </resources>
