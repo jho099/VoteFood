@@ -63,8 +63,9 @@ public class VoteDialog extends AppCompatDialogFragment {
             public void onClick(View view) {
                 int score = rater.getValue();
                 food.votes = score;
-                mainActivity.foodRecyclerViewAdapter.updateFoods(food, position);
+                int newPosition = mainActivity.foodRecyclerViewAdapter.updateFoods(food, position);
                 dialog.dismiss();
+                mainActivity.recyclerView.smoothScrollToPosition(newPosition);
             }
         });
     }

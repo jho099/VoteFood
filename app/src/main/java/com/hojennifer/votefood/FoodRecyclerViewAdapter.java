@@ -35,11 +35,20 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         }
     }
 
-    public void updateFoods(Food food, int position){
+    public int updateFoods(Food food, int position){
         Food toBeUpdated = foods.get(position);
         toBeUpdated.votes = food.votes;
         Collections.sort(foods);
+        int newPosition = 0;
+        for(int i = 0; i < foods.size(); i++){
+            Food curr = foods.get(i);
+            if(curr.drawableID == food.drawableID){
+                newPosition = i;
+                break;
+            }
+        }
         notifyDataSetChanged();
+        return newPosition;
     }
 
     @NonNull
@@ -48,6 +57,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.food_row, parent, false);
+
         return new FoodViewHolder(itemView);
     }
 
@@ -56,14 +66,26 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         final Food food = foods.get(position);
         final int index = position;
         holder.foodPic.setImageResource(food.drawableID);
-        holder.name.setText(food.name);
-        holder.score.setText(String.valueOf(food.votes));
-        holder.star.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mainActivity.createDialog(food, index);
             }
         });
+        /*holder.foodPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.createDialog(food, index);
+            }
+        });*/
+        holder.name.setText(food.name);
+        holder.score.setText(String.valueOf(food.votes));
+        /*holder.star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.createDialog(food, index);
+            }
+        });*/
 
     }
 
