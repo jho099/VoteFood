@@ -5,4 +5,5 @@
     <string name="rate_it_out_of_10">Rate it out of 10!</string>
     <string name="tv_foodname">TextView</string>
     <string name="confirm">confirm</string>
+    <string name="hint">Your name</string>
 </resources>

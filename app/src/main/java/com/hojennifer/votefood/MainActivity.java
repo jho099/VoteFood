@@ -9,19 +9,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        Response.Listener<String>, Response.ErrorListener {
     ArrayList<Food> foods;
     RecyclerView recyclerView;
     FoodRecyclerViewAdapter foodRecyclerViewAdapter;
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
+    Food foodBeingVoted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         recyclerView.setAdapter(foodRecyclerViewAdapter);
+
 
     }
     public void createDialog(Food food, final int position){
@@ -91,5 +104,38 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("food list", arrayData);
         editor.apply();
 
+    }
+
+    public void sendVotesToServer(Food food, String voter){
+        foodBeingVoted = food;
+        String url = "https://user.tjhsst.edu/2021jho/votefood?name="+voter+"&food="+food.name+"&points="+food.votes;
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, url,
+                this,
+                this);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onResponse(String response) {
+        String toast = "Internet error";
+        try {
+            JSONObject jObject = new JSONObject(response);
+            String food = jObject.getString("food");
+            double avg = jObject.getDouble("average");
+            toast = "The average score for " + food + " is " + avg;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
     }
 }

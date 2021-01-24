@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class VoteDialog extends AppCompatDialogFragment {
     ImageView pic;
+    EditText voterName;
     TextView name;
     NumberPicker rater;
     Button confirm;
@@ -46,6 +48,7 @@ public class VoteDialog extends AppCompatDialogFragment {
         name.setText( food.name );
         pic = view.findViewById(R.id.iv_picture);
         pic.setImageResource(food.drawableID);
+        voterName = view.findViewById(R.id.et_name);
         rater = view.findViewById(R.id.number_picker);
         rater.setMinValue(1);
         rater.setMaxValue(10);
@@ -63,6 +66,7 @@ public class VoteDialog extends AppCompatDialogFragment {
             public void onClick(View view) {
                 int score = rater.getValue();
                 food.votes = score;
+                mainActivity.sendVotesToServer(food, voterName.getText().toString());
                 int newPosition = mainActivity.foodRecyclerViewAdapter.updateFoods(food, position);
                 dialog.dismiss();
                 mainActivity.recyclerView.smoothScrollToPosition(newPosition);

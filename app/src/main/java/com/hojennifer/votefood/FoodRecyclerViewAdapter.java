@@ -3,8 +3,17 @@ package com.hojennifer.votefood;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,16 +35,21 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         TextView name;
         TextView score;
         ImageView star;
+        EditText voterName;
         public FoodViewHolder(View view){
             super(view);
             foodPic = view.findViewById(R.id.iv_pic);
             name = view.findViewById(R.id.tv_name);
             score = view.findViewById(R.id.tv_score);
             star = view.findViewById(R.id.iv_star);
+            voterName = view.findViewById(R.id.et_name);
         }
     }
 
     public int updateFoods(Food food, int position){
+
+
+
         Food toBeUpdated = foods.get(position);
         toBeUpdated.votes = food.votes;
         Collections.sort(foods);
@@ -50,6 +64,8 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         notifyDataSetChanged();
         return newPosition;
     }
+
+
 
     @NonNull
     @Override
